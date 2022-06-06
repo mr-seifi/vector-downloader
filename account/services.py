@@ -58,6 +58,38 @@ class AccountServices:
         return response.json().get('link')
 
     @staticmethod
+    def get_download_auth(email: str) -> str:
+        import requests
+
+        headers = {
+            'authority': 'user.api.photo-ac.com',
+            'accept': 'application/json, text/plain, */*',
+            'accept-language': 'en-US,en;q=0.9,fa-IR;q=0.8,fa;q=0.7',
+            'content-type': 'application/json;charset=UTF-8',
+            'origin': 'https://en.ac-illust.com',
+            'referer': 'https://en.ac-illust.com/',
+            'sec-ch-ua': '" Not A;Brand";v="99", "Chromium";v="101", "Google Chrome";v="101"',
+            'sec-ch-ua-mobile': '?0',
+            'sec-ch-ua-platform': '"Linux"',
+            'sec-fetch-dest': 'empty',
+            'sec-fetch-mode': 'cors',
+            'sec-fetch-site': 'cross-site',
+            'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.54 Safari/537.36',
+        }
+
+        json_data = {
+            'email': email,
+            'type': 'VIA_SSO',
+            'language': 'en',
+            'service_type': 'illust_ac',
+        }
+
+        response = requests.post('https://user.api.photo-ac.com/sso/downloader/user/verify', headers=headers,
+                                 json=json_data)
+
+        return response.json().get('token')
+
+    @staticmethod
     def _get_token(sso_token: str):
         headers = {
             'authority': 'accounts.ac-illust.com',
